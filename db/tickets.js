@@ -1,18 +1,17 @@
 const { client } = require("./users");
 
-async function createTicket(reportFields) {
-  const { title, description, category } = reportFields;
+async function createTicket(title, description, category, author, time) {
 
   try {
     const {
       rows: [ticket],
     } = await client.query(
       `
-    INSERT INTO tickets(title, description, category, claimed)
-    VALUES ($1, $2, $3, false)
+    INSERT INTO tickets(title, description, category, claimed, author, time)
+    VALUES ($1, $2, $3, false, $4, $5)
     RETURNING *
     `,
-      [title, description, category]
+      [title, description, category, author, time]
     );
     return ticket;
   } catch (error) {
@@ -47,7 +46,7 @@ async function getAllFrontEndTickets() {
   try {
     const { rows: tickets } = await client.query(`
             SELECT * FROM tickets
-            WHERE category="Front End";
+            WHERE category="FrontEnd";
         `);
     return tickets;
   } catch (error) {
@@ -59,7 +58,7 @@ async function getAllBackEndTickets() {
   try {
     const { rows: tickets } = await client.query(`
             SELECT * FROM tickets
-            WHERE category="Back End";
+            WHERE category="BackEnd";
         `);
     return tickets;
   } catch (error) {

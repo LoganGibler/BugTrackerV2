@@ -1,6 +1,11 @@
 const { client } = require("./index.js");
-const { createUser, createTicket, addTicketToUser } = require("./index.js");
- 
+const {
+  createUser,
+  createTicket,
+  addTicketToUser,
+  getUserByUsername,
+} = require("./index.js");
+
 async function dropTables() {
   try {
     console.log("Starting to drop tables");
@@ -30,7 +35,9 @@ async function buildTables() {
             title VARCHAR(255) NOT NULL,
             description VARCHAR(255) NOT NULL,
             category VARCHAR(255),
-            claimed BOOLEAN
+            claimed BOOLEAN,
+            author VARCHAR(255) NOT NULL,
+            time VARCHAR(255) NOT NULL
         );
         `);
     console.log("Finished building tables");
@@ -43,14 +50,8 @@ async function buildTables() {
 async function createInitalUsers() {
   try {
     // console.log("attempting to create initial users...");
-    const userOne = await createUser({
-      username: "logan",
-      password: "123",
-    });
-    const userTwo = await createUser({
-      username: "payton",
-      password: "admin",
-    });
+    const userOne = await createUser("Logan", "123");
+    const userTwo = await createUser("Payton", "123");
     return [userOne, userTwo];
   } catch (error) {
     // console.log("Error creating inital users!");
@@ -60,19 +61,9 @@ async function createInitalUsers() {
 async function createInitalTicket() {
   try {
     // console.log("trying to create sample tickets");
-    const ticketOne = await createTicket({
-      title: "Login Button problems",
-      description:
-        "Login Button Leaks login token to front end console. Likely a uncommented console.log().",
-      category: "Front End",
-    });
-    const ticketTwo = await createTicket({
-      title: "Only getting unclaimed tickets",
-      description:
-        "When I click the button that shows all unsolved tickets, it shows only unclaimed tickets.",
-      category: "Back End",
-    });
-    // console.log(ticketTwo);
+    const ticketOne = await createTicket("Login Button problems", "Login Button Leaks login token to front end console. Likely a uncommented console.log().","FrontEnd","Logan", "11/21/2022")
+    const ticketTwo = await createTicket("Registration Problems", "Not getting notified if registration works. Please add alert box.", "FrontEnd", "Logan", "11/23/2022")
+    // console.log(ticketOne);
     return [ticketOne, ticketTwo];
   } catch (error) {
     // console.log("error creating tickets");
@@ -80,17 +71,32 @@ async function createInitalTicket() {
   }
 }
 
-async function addTicketToUserTest(){
-    try {
-        const ticketTest1 = await addTicketToUser({
-            claimedticket: 2,
-            id: 1,
-        })
+async function addTicketToUserTest() {
+  try {
+    const ticketTest1 = await addTicketToUser({
+      claimedticket: 1,
+      id: 1,
+    });
+    const ticketTest2 = await addTicketToUser({
+      claimedticket: 2,
+      id: 2,
+    });
 
-        return [ticketTest1]
-    } catch (error) {
-        throw error
-    }
+    return [ticketTest1, ticketTest2];
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserByUsernameTest() {
+  try {
+    const testUser1 = await getUserByUsername("Logan");
+    const testUser2 = await getUserByUsername("Payton");
+    // console.log("these are the users", testUser1, testUser2);
+    return [testUser1, testUser2];
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function rebuildDB() {
@@ -102,6 +108,7 @@ async function rebuildDB() {
     await createInitalUsers();
     await createInitalTicket();
     await addTicketToUserTest();
+    await getUserByUsernameTest();
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");

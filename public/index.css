@@ -1,0 +1,10 @@
+#root{
+    margin: 0;
+    background-image: url(
+        "./LS_SummerWallpaper_Leaves_2048x2048.jpg"
+    );
+    background-color:#0BCFF6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

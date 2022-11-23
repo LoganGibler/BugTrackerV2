@@ -5,14 +5,14 @@ const DB_URL =
 const client = new Client(DB_URL);
 // database methods
 
-async function createUser(reportFields) {
-  const { username, password } = reportFields;
+async function createUser(username, password) {
+  
   try {
     const {
       rows: [users],
     } = await client.query(
       `
-    INSERT INTO users(username, password, claimedTicket, ticketssolved)
+    INSERT INTO users(username, password, claimedticket, ticketssolved)
     VALUES ($1, $2, 0, 0)
     RETURNING *
     `,
@@ -26,21 +26,18 @@ async function createUser(reportFields) {
   }
 }
 
-
-async function allUsers(){
-    try {
-        const {rows: [users],} = await client.query(`
-            SELECT username FROM users
-            RETURNING *
+async function allUsers() {
+  try {
+    const { rows } = await client.query(`
+            SELECT * FROM users
         `);
-        return users
-    } catch (error) {
-        throw error
-    }
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
-
-async function getUserById(userId){
+async function getUserById(userId) {
   try {
     const {
       rows: [user],
@@ -53,7 +50,25 @@ async function getUserById(userId){
     );
     return user;
   } catch (error) {
-    throw error
+    throw error;
+  }
+}
+
+async function getUserByUsername(username) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT * FROM users 
+      WHERE username=$1
+    `,
+      [username]
+    );
+
+    return user;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -62,4 +77,5 @@ module.exports = {
   createUser,
   allUsers,
   getUserById,
+  getUserByUsername,
 };

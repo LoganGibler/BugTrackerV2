@@ -1,0 +1,11 @@
+
+.large_inputbox{
+    width: 100%;
+    min-height: 200px;
+    font-size:14pt;
+    margin-top: 1%;
+}
+
+.title_box{
+    width: 60%;
+}
