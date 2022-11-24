@@ -103,3 +103,13 @@ try {
   throw data
 }
 }
+
+export async function getAllUnclaimedTickets(){
+  try {
+    const {data} = await axios.get("http://localhost:5000/api/tickets/unclaimed")
+    console.log(data)
+    return data.tickets
+  } catch (error) {
+    throw error
+  }
+}

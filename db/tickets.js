@@ -67,9 +67,7 @@ async function getAllBackEndTickets() {
 }
 // set user-claimedticket to ticketID
 // need to get userID and ticketID, kinda weird?
-async function addTicketToUser(reportFields) {
-  const { claimedticket, id } = reportFields;
-
+async function addTicketToUser(claimedticket, id) {
   try {
     const {
       rows: [user],
@@ -88,7 +86,7 @@ async function addTicketToUser(reportFields) {
         claimed=True
         WHERE id=${claimedticket};
     `);
-    return user;
+    return ticket;
   } catch (error) {
     throw error;
   }

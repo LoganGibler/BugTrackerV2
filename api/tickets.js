@@ -1,10 +1,14 @@
 const express = require("express");
 const ticketsRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { createTicket, getAllTickets } = require("../db");
+const {
+  createTicket,
+  getAllTickets,
+  getAllUnclaimedTickets,
+} = require("../db");
+
 require("dotenv").config();
 const { JWT_SECRET = "neverTell" } = process.env;
-
 
 ticketsRouter.get("/", async (req, res) => {
   const tickets = await getAllTickets();
@@ -31,5 +35,12 @@ ticketsRouter.post("/createticket", async (req, res, next) => {
   }
 });
 
+ticketsRouter.get("/unclaimed", async (req, res) => {
+  const tickets = await getAllUnclaimedTickets();
+  console.log(tickets);
+  res.send({
+    tickets,
+  });
+});
 
 module.exports = ticketsRouter;

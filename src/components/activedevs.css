@@ -1,16 +1,20 @@
-.devs-main-container{
-   
 
+
+.devs-main-container{
+    display: flex;
+    justify-content: center;
+    margin: 15px;
 }
 
 .dev-container{
     display: flex;
     justify-content: center; 
     /* align-items: center;  */
-    margin: auto;
+    /* margin: auto; */
+    margin: 15px;
     margin-top: 15px;
-    min-width: 200px;
-    max-width: 570px;
+    min-width: 500px;
+    max-width: 520px;
     background-color: whitesmoke;
     /* border: 10px black #660033; */
     border-radius: 50px;

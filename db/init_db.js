@@ -4,6 +4,7 @@ const {
   createTicket,
   addTicketToUser,
   getUserByUsername,
+  getAllUnclaimedTickets,
 } = require("./index.js");
 
 async function dropTables() {
@@ -61,10 +62,29 @@ async function createInitalUsers() {
 async function createInitalTicket() {
   try {
     // console.log("trying to create sample tickets");
-    const ticketOne = await createTicket("Login Button problems", "Login Button Leaks login token to front end console. Likely a uncommented console.log().","FrontEnd","Logan", "11/21/2022")
-    const ticketTwo = await createTicket("Registration Problems", "Not getting notified if registration works. Please add alert box.", "FrontEnd", "Logan", "11/23/2022")
-    // console.log(ticketOne);
-    return [ticketOne, ticketTwo];
+    const ticketOne = await createTicket(
+      "Login Button problems",
+      "Login Button Leaks login token to front end console. Likely a uncommented console.log().",
+      "FrontEnd",
+      "Logan",
+      "11/21/2022"
+    );
+    const ticketTwo = await createTicket(
+      "Registration Problems",
+      "Not getting notified if registration works. Please add alert box.",
+      "FrontEnd",
+      "Logan",
+      "11/23/2022"
+    );
+    const ticketThree = await createTicket(
+      "UnclaimedTicketProblem",
+      "This is an unclaimed Ticket. I need to see if this query works.",
+      "Backend",
+      "Logan",
+      "11/23/2022"
+    )
+    // console.log(ticketOne, ticketTwo, ticketThree)
+    return [ticketOne, ticketTwo, ticketThree];
   } catch (error) {
     // console.log("error creating tickets");
     throw error;
@@ -73,15 +93,9 @@ async function createInitalTicket() {
 
 async function addTicketToUserTest() {
   try {
-    const ticketTest1 = await addTicketToUser({
-      claimedticket: 1,
-      id: 1,
-    });
-    const ticketTest2 = await addTicketToUser({
-      claimedticket: 2,
-      id: 2,
-    });
-
+    const ticketTest1 = await addTicketToUser(1,1);
+    const ticketTest2 = await addTicketToUser(2,2);
+    // console.log("this is after adding ticket to user",ticketTest1, ticketTest2)
     return [ticketTest1, ticketTest2];
   } catch (error) {
     throw error;
@@ -99,6 +113,12 @@ async function getUserByUsernameTest() {
   }
 }
 
+async function fetchAllUnclaimedTickets() {
+  const data = await getAllUnclaimedTickets();
+  console.log("these are unclaimed tickets",data);
+  return [data];
+}
+
 async function rebuildDB() {
   try {
     console.log("starting to build DB");
@@ -107,8 +127,9 @@ async function rebuildDB() {
     await buildTables();
     await createInitalUsers();
     await createInitalTicket();
-    await addTicketToUserTest();
     await getUserByUsernameTest();
+    await addTicketToUserTest();
+    await fetchAllUnclaimedTickets();
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");

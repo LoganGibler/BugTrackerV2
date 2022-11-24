@@ -9,7 +9,8 @@ import {
 } from "react-router-dom";
 
 import {
-  Dashboard,
+  DashboardUnclaimedTickets,
+  DashboardDevs,
   Activedevs,
   Activetickets,
   Navigation,
@@ -18,30 +19,24 @@ import {
   Register,
 } from "./components";
 
-import { getAllTickets, getAllDevs } from "./api";
+import { getAllTickets, getAllDevs, getAllUnclaimedTickets } from "./api";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState("");
   const [username, setUsername] = useState("");
   const [tickets, setTickets] = useState([]);
   const [devs, setDevs] = useState([]);
+  const [unclaimedTickets, setUnclaimedTickets] = useState([]);
 
-  async function fetchAllUnclaimedTickets(){
-
+  async function fetchAllUnclaimedTickets() {
+    const data = await getAllUnclaimedTickets();
+    // console.log("this is unclaimedTickets",data)
+    setUnclaimedTickets(data);
   }
-
-  async function fetchAllDevsWithTicket(){
-    
-  }
-
-
-
-
-
 
   async function fetchAllTickets() {
     const data = await getAllTickets();
-    console.log(data);
+    // console.log(data);
     setTickets(data);
   }
 
@@ -53,7 +48,9 @@ const App = () => {
   useEffect(() => {
     fetchAllTickets();
     fetchAllDevs();
-    console.log(tickets);
+    fetchAllUnclaimedTickets()
+
+    // console.log(unclaimedTickets);
   }, []);
 
   return (
@@ -73,7 +70,12 @@ const App = () => {
             />
           </Route>
           <Route path="/activedevs">
-            <Activedevs devs={devs} setDevs={setDevs} tickets={tickets} setTickets={setTickets}/>
+            <Activedevs
+              devs={devs}
+              setDevs={setDevs}
+              tickets={tickets}
+              setTickets={setTickets}
+            />
           </Route>
           <Route path="/activetickets">
             <Activetickets tickets={tickets} setTickets={setTickets} />
@@ -82,7 +84,8 @@ const App = () => {
             <Createticket />
           </Route>
           <Route path="/dashboard">
-            <Dashboard />
+            <DashboardUnclaimedTickets devs={devs} unclaimedTickets={unclaimedTickets} tickets={tickets}/>
+            <DashboardDevs devs={devs} tickets={tickets}/>
           </Route>
         </Switch>
       </div>
