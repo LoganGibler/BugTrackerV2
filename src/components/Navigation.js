@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import "./navigation.css";
 
-const Navigation = ({ isLoggedIn, setIsLoggedIn }) => {
+const Navigation = ({ isLoggedIn, setIsLoggedIn, loggedIn }) => {
   const history = useHistory();
 
   return (
@@ -18,7 +18,7 @@ const Navigation = ({ isLoggedIn, setIsLoggedIn }) => {
           >
             BugTracker
           </a>
-          {!isLoggedIn ? null : (
+          {!loggedIn ? null : (
             <div className="middle-menu">
               <li className="nav-item">
                 <a
@@ -67,7 +67,14 @@ const Navigation = ({ isLoggedIn, setIsLoggedIn }) => {
             </div>
           )}
           <ul className="nav-menu">
-            {isLoggedIn ? (
+            {loggedIn ? (
+              <li className="nav-item">
+                <a className="nav-link" onClick={()=>{
+                  history.push("/currenttask")
+                }}>Current Task</a>
+              </li>
+            ) : null}
+            {loggedIn ? (
               <li className="nav-item">
                 <a
                   // type="submit"
@@ -80,7 +87,8 @@ const Navigation = ({ isLoggedIn, setIsLoggedIn }) => {
                 </a>
               </li>
             ) : null}
-            {isLoggedIn ? null : (
+
+            {loggedIn ? null : (
               <li className="nav-item">
                 <a
                   onClick={() => {
@@ -91,14 +99,15 @@ const Navigation = ({ isLoggedIn, setIsLoggedIn }) => {
                 </a>
               </li>
             )}
-            {isLoggedIn ? (
+            {loggedIn ? (
               <li>
                 <a
                   type="submit"
                   onClick={() => {
                     setIsLoggedIn(false);
-                    localStorage.clear();
+                    window.localStorage.removeItem("isLoggedIn", false)
                     history.push("/login");
+                    localStorage.clear()
                   }}
                 >
                   Logout

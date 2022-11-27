@@ -4,8 +4,10 @@
     min-height: 200px;
     font-size:14pt;
     margin-top: 1%;
+    border-radius: 10px;
 }
 
 .title_box{
     width: 60%;
+    border-radius: 10px;
 }

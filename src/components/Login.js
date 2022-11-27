@@ -16,25 +16,20 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
         onSubmit={async (e) => {
           e.preventDefault();
           try {
-            // console.log("passed in username", username);
-            // console.log("passed in password", password);
             const activeUser = await loginUser(username, password);
             if (activeUser !== undefined) {
-              // console.log("this is active user", activeUser);
+              window.localStorage.setItem("isLoggedIn", true);
               storeUser(activeUser);
               storeToken(activeUser);
-              // console.log("logged in!!");
               setUsername("");
               setPassword("");
               setIsLoggedIn(true);
-              history.push("/dashboard")
+              history.push("/dashboard");
             } else {
-              alert("Login Failed.")
+              alert("Login Failed.");
             }
           } catch (error) {
             throw error;
-          } finally {
-            // nothing
           }
         }}
       >

@@ -1,4 +1,4 @@
 module.exports = {
-    ...require("./users"),
-    ...require("./tickets")
-   };
+  ...require("./users"),
+  ...require("./tickets"),
+};

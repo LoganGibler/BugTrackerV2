@@ -6,7 +6,6 @@ const client = new Client(DB_URL);
 // database methods
 
 async function createUser(username, password) {
-  
   try {
     const {
       rows: [users],
@@ -72,10 +71,52 @@ async function getUserByUsername(username) {
   }
 }
 
+async function addPointToUser(userId) {
+  try {
+    const {
+      rows: [points],
+    } = await client.query(
+      `
+      SELECT ticketssolved FROM users
+      WHERE id=${userId}
+    `
+    );
+    console.log(points.ticketssolved)
+    let increasedPoints = points.ticketssolved + 1;
+    console.log(increasedPoints)
+    //     let increasedPoints = points + 1;
+
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+            UPDATE users
+            SET
+            ticketssolved=${increasedPoints}
+            WHERE id=${userId};
+        `
+    );
+    console.log(user);
+        let value = 0
+        const { rows } = await client.query(`
+          UPDATE users
+          SET
+          claimedticket=${value}
+          WHERE id=${userId};
+        `)
+
+    //     return claimedticketvalue;
+    // return points;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   client,
   createUser,
   allUsers,
   getUserById,
   getUserByUsername,
+  addPointToUser,
 };

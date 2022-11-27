@@ -2,16 +2,19 @@ const express = require("express");
 const ticketsRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const {
-  createTicket,
-  getAllTickets,
-  getAllUnclaimedTickets,
-} = require("../db");
+  createTicketDB,
+  getAllTicketsDB,
+  getAllUnclaimedTicketsDB,
+  addTicketToUserDB,
+  deleteTicketDB,
+  removeClaimFromTicketDB
+} = require("../db/tickets");
 
 require("dotenv").config();
 const { JWT_SECRET = "neverTell" } = process.env;
 
 ticketsRouter.get("/", async (req, res) => {
-  const tickets = await getAllTickets();
+  const tickets = await getAllTicketsDB();
 
   res.send({ tickets });
 });
@@ -19,7 +22,7 @@ ticketsRouter.get("/", async (req, res) => {
 ticketsRouter.post("/createticket", async (req, res, next) => {
   const { title, category, description, author, time } = req.body;
   try {
-    const newTicket = await createTicket(
+    const newTicket = await createTicketDB(
       title,
       description,
       category,
@@ -36,11 +39,37 @@ ticketsRouter.post("/createticket", async (req, res, next) => {
 });
 
 ticketsRouter.get("/unclaimed", async (req, res) => {
-  const tickets = await getAllUnclaimedTickets();
-  console.log(tickets);
+  const tickets = await getAllUnclaimedTicketsDB();
+  // console.log(tickets);
   res.send({
     tickets,
   });
+});
+
+ticketsRouter.post("/claimticket", async (req, res, next) => {
+  const { ticketId, userId } = req.body;
+  const data = await addTicketToUserDB(ticketId, userId);
+  // console.log(data);
+  res.send({
+    data,
+  });
+})
+
+ticketsRouter.post("/delete", async (req, res, next) => {
+  const { ticketId } = req.body;
+
+  const data = await deleteTicketDB(ticketId);
+  res.send({
+    data,
+  });
+});
+
+ticketsRouter.post("/removeclaim", async (req, res, next) => {
+  const { userId } = req.body;
+
+  const data = await removeClaimFromTicketDB(userId);
+  // console.log("this is cracked data",data)
+  res.send({ data });
 });
 
 module.exports = ticketsRouter;

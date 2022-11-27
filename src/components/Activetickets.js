@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import "./activeTickets.css"
-
+// import { deleteTicket } from "../../db";
+import { addPointToUser, addTicketToDev, deleteTicket, removeTicketFromDev } from "../api";
+import { getUser } from "../auth";
+import "./activeTickets.css";
 
 const Activetickets = ({ tickets }) => {
   return (
@@ -19,9 +21,33 @@ const Activetickets = ({ tickets }) => {
                     <p>Created by: {ticket.author}</p>
                     <p>At: {ticket.time}</p>
                     <p>ID: {ticket.id}</p>
-                    <p className="description">Description: {ticket.description}</p>
-                    <button className="ticket-buttons">Claim</button>
-                    <button className="ticket-buttons">Solved</button>
+                    <p className="description">
+                      Description: {ticket.description}
+                    </p>
+                    <button
+                      className="ticket-buttons"
+                      onClick={async (e) => {
+                        let user = getUser();
+                        removeTicketFromDev(user.userId)
+                        addTicketToDev(ticket.id, user.userId);
+                        alert("Ticket successfully added")
+                      }}
+                    >
+                      Claim
+                    </button>
+                    <button
+                      className="ticket-buttons"
+                      onClick={async (e) => {
+                        let user = getUser();
+                        // Solved Button (DELETE and add point)
+                        // functioncall from api
+                        addPointToUser(user.userId);
+                        deleteTicket(ticket.id);
+                        alert("Ticket Solved, point added.")
+                      }}
+                    >
+                      Solved
+                    </button>
                   </div>
                 </div>
               );

@@ -3,17 +3,6 @@ import { title } from "process";
 import { storeToken, storeUser } from "../auth";
 const BASE = "http://localhost:5000/api";
 
-// this is an example for an api call with axios
-
-// export async function getUsers() {
-//   try {
-//     const { data } = await axios.get(`${ BASE }/users`);
-//     return data;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 export async function loginUser(username, password) {
   try {
     const { data } = await axios.post(`http://localhost:5000/api/users/login`, {
@@ -82,33 +71,87 @@ export async function createATicket(
 
     // console.log(data)
     return data;
-  } catch (error) {}
-}
-
-export async function getAllTickets(){
-  try {
-    const { data } = await axios.get("http://localhost:5000/api/tickets")
-    return data.tickets
   } catch (error) {
     throw error
   }
 }
 
-export async function getAllDevs(){
-try {
-  const {data} = await axios.get("http://localhost:5000/api/users")
-
-  return data.users
-} catch (error) {
-  throw data
-}
-}
-
-export async function getAllUnclaimedTickets(){
+export async function getAllTickets() {
   try {
-    const {data} = await axios.get("http://localhost:5000/api/tickets/unclaimed")
-    console.log(data)
-    return data.tickets
+    const { data } = await axios.get("http://localhost:5000/api/tickets");
+    return data.tickets;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getAllDevs() {
+  try {
+    const { data } = await axios.get("http://localhost:5000/api/users");
+
+    return data.users;
+  } catch (error) {
+    throw data;
+  }
+}
+
+export async function getAllUnclaimedTickets() {
+  try {
+    const { data } = await axios.get(
+      "http://localhost:5000/api/tickets/unclaimed"
+    );
+    console.log(data);
+    return data.tickets;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addTicketToDev(ticketId, userId) {
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/tickets/claimticket",
+      {
+        ticketId: ticketId,
+        userId: userId,
+      }
+    );
+    console.log("this is addtickettouser response", data);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addPointToUser(userId) {
+  try {
+    const { data } = axios.post("http://localhost:5000/api/users/addpoint", {
+      userId: userId,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteTicket(ticketId) {
+  try {
+    const { data } = axios.post("http://localhost:5000/api/tickets/delete", {
+      ticketId: ticketId,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function removeTicketFromDev(userId){
+  try {
+    const {data} = axios.post("http://localhost:5000/api/tickets/removeclaim",{
+      userId: userId
+    })
+    console.log("this is cracked data", data)
+    return data
   } catch (error) {
     throw error
   }

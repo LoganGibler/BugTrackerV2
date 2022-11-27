@@ -1,7 +1,7 @@
+// const ticketsRouter = require("../api/tickets");
 const { client } = require("./users");
 
-async function createTicket(title, description, category, author, time) {
-
+async function createTicketDB(title, description, category, author, time) {
   try {
     const {
       rows: [ticket],
@@ -19,7 +19,7 @@ async function createTicket(title, description, category, author, time) {
   }
 }
 
-async function getAllTickets() {
+async function getAllTicketsDB() {
   try {
     const { rows: tickets } = await client.query(`
         SELECT * FROM tickets;
@@ -30,7 +30,7 @@ async function getAllTickets() {
   }
 }
 
-async function getAllUnclaimedTickets() {
+async function getAllUnclaimedTicketsDB() {
   try {
     const { rows: tickets } = await client.query(`
         SELECT * FROM tickets
@@ -42,7 +42,7 @@ async function getAllUnclaimedTickets() {
   }
 }
 
-async function getAllFrontEndTickets() {
+async function getAllFrontEndTicketsDB() {
   try {
     const { rows: tickets } = await client.query(`
             SELECT * FROM tickets
@@ -54,7 +54,7 @@ async function getAllFrontEndTickets() {
   }
 }
 
-async function getAllBackEndTickets() {
+async function getAllBackEndTicketsDB() {
   try {
     const { rows: tickets } = await client.query(`
             SELECT * FROM tickets
@@ -67,15 +67,15 @@ async function getAllBackEndTickets() {
 }
 // set user-claimedticket to ticketID
 // need to get userID and ticketID, kinda weird?
-async function addTicketToUser(claimedticket, id) {
+async function addTicketToUserDB(ticketId, userId) {
   try {
     const {
       rows: [user],
     } = await client.query(`
        UPDATE users
        SET 
-       claimedticket = ${claimedticket}
-       WHERE id = ${id};
+       claimedticket = ${ticketId}
+       WHERE id = ${userId};
     `);
 
     const {
@@ -84,7 +84,7 @@ async function addTicketToUser(claimedticket, id) {
         UPDATE tickets
         SET 
         claimed=True
-        WHERE id=${claimedticket};
+        WHERE id=${ticketId};
     `);
     return ticket;
   } catch (error) {
@@ -92,43 +92,78 @@ async function addTicketToUser(claimedticket, id) {
   }
 }
 
-async function solveTicket(){
-        const solved = "Solved"
-    try {
-        const {rows: [tickets]} = await client.query(`
-            UPDATE tickets
-            SET
-            category = ${solved};
-        `);
-        return tickets
-    } catch (error) {
-        throw error
-    }
-}
+// async function solveTicketDB() {
+//   const solved = "Solved";
+//   try {
+//     const {
+//       rows: [tickets],
+//     } = await client.query(`
+//             UPDATE tickets
+//             SET
+//             category = ${solved};
+//         `);
+//     return tickets;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 async function getTicketByUsername(username) {}
 
-async function deleteTicket(ticketId) {
+async function deleteTicketDB(ticketId) {
   try {
     const {
-      rows: [tickets],
-    } = await client.query(`
+      rows: [ticket],
+    } = await client.query(
+      `
           DELETE FROM tickets
-          WHERE id=${ticketId};
-          `);
-    return products;
+          WHERE id=$1;
+          `,
+      [ticketId]
+    );
+    return ticket;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// let claimedTicketId;
+async function removeClaimFromTicketDB(userId) {
+  try {
+    const {
+      rows: [claimedticket],
+    } = await client.query(`
+      SELECT claimedticket FROM users
+      WHERE id=${userId};
+    `);
+
+    let claimedTicketId = claimedticket.claimedticket;
+    console.log("this is claimed ticket", claimedTicketId);
+    // console.log(typeof claimedTicketId)
+    const {
+      rows: [ticket],
+    } = await client.query(`
+      UPDATE tickets
+      SET
+      claimed=FALSE
+      WHERE id=${claimedTicketId};
+    `,);
+    console.log("this is changed ticket",ticket)
+    return ticket
   } catch (error) {
     throw error;
   }
 }
 
 module.exports = {
-  createTicket,
-  getAllTickets,
-  getAllUnclaimedTickets,
-  getAllFrontEndTickets,
-  getAllBackEndTickets,
-  deleteTicket,
-  addTicketToUser,
-  solveTicket,
+  createTicketDB,
+  getAllTicketsDB,
+  getAllUnclaimedTicketsDB,
+  getAllFrontEndTicketsDB,
+  getAllBackEndTicketsDB,
+  deleteTicketDB,
+  addTicketToUserDB,
+  // solveTicketDB,
+  removeClaimFromTicketDB,
+  // addFalseToTicket,
 };

@@ -39,10 +39,7 @@ apiRouter.use((req, res, next) => {
 const usersRouter = require("./users");
 apiRouter.use("/users", usersRouter);
 
-const ticketsRouter = require("./tickets")
-apiRouter.use("/tickets", ticketsRouter)
-
-
-
+const ticketsRouter = require("./tickets");
+apiRouter.use("/tickets", ticketsRouter);
 
 module.exports = apiRouter;

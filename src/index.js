@@ -17,6 +17,7 @@ import {
   Createticket,
   Login,
   Register,
+  Currenttask,
 } from "./components";
 
 import { getAllTickets, getAllDevs, getAllUnclaimedTickets } from "./api";
@@ -27,6 +28,7 @@ const App = () => {
   const [tickets, setTickets] = useState([]);
   const [devs, setDevs] = useState([]);
   const [unclaimedTickets, setUnclaimedTickets] = useState([]);
+  const loggedIn = window.localStorage.getItem("isLoggedIn");
 
   async function fetchAllUnclaimedTickets() {
     const data = await getAllUnclaimedTickets();
@@ -48,7 +50,7 @@ const App = () => {
   useEffect(() => {
     fetchAllTickets();
     fetchAllDevs();
-    fetchAllUnclaimedTickets()
+    fetchAllUnclaimedTickets();
 
     // console.log(unclaimedTickets);
   }, []);
@@ -56,10 +58,13 @@ const App = () => {
   return (
     <Router>
       <div id="App">
-        <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} loggedIn={loggedIn}/>
         <Switch>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/currenttask">
+            <Currenttask tickets={tickets} devs={devs}/>
           </Route>
           <Route path="/login">
             <Login
@@ -84,8 +89,12 @@ const App = () => {
             <Createticket />
           </Route>
           <Route path="/dashboard">
-            <DashboardUnclaimedTickets devs={devs} unclaimedTickets={unclaimedTickets} tickets={tickets}/>
-            <DashboardDevs devs={devs} tickets={tickets}/>
+            <DashboardUnclaimedTickets
+              devs={devs}
+              unclaimedTickets={unclaimedTickets}
+              tickets={tickets}
+            />
+            <DashboardDevs devs={devs} tickets={tickets} />
           </Route>
         </Switch>
       </div>
