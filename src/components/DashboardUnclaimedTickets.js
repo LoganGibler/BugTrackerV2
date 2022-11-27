@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./dashboard.css";
-import { addPointToUser, addTicketToDev, deleteTicket, removeTicketFromDev} from "../api";
+import {
+  addPointToUser,
+  addTicketToDev,
+  deleteTicket,
+  removeTicketFromDev,
+} from "../api";
 import { getUser } from "../auth";
 
 const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
-  // console.log("this is unclaimedTickets", unclaimedTickets);
-  // console.log("this is devs", devs);
   return (
     <div>
-      {/* we want all unclaimed tickets up at the top */}
       <div className="tickets-main-container">
         {unclaimedTickets.length
           ? unclaimedTickets.map((ticket) => {
@@ -24,24 +26,50 @@ const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
                     <p className="description">
                       Description: {ticket.description}
                     </p>
-                    <button
-                      className="ticket-buttons"
-                      onClick={async (e) => {
-                        let user = getUser();
-                        // need a removeTicketFromDev
-                        removeTicketFromDev(user.userId)
-                        addTicketToDev(ticket.id, user.userId);
-                        alert("Ticket successfully added");
-                      }}
-                    >
-                      Claim
-                    </button>
+                    {devs.length
+                      ? devs.map((dev) => {
+                          let user = getUser();
+                          if (dev.id === user.userId) {
+                            if (dev.claimedticket !== 0) {
+                              //  if def has claimedticket, we must remove ticketfromdev first
+                              return (
+                                <button
+                                  className="ticket-buttons"
+                                  onClick={async (e) => {
+                                    removeTicketFromDev(user.userId);
+                                    addTicketToDev(ticket.id, user.userId);
+                                    location.reload();
+                                    alert("Ticket successfully added");
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              );
+                            }
+                            if (dev.claimedticket === 0) {
+                              return (
+                                <button
+                                  className="ticket-buttons"
+                                  onClick={async (e) => {
+                                    addTicketToDev(ticket.id, user.userId);
+                                    location.reload();
+                                    alert("Ticket successfully added");
+                                  }}
+                                >
+                                  Claim
+                                </button>
+                              );
+                            }
+                          }
+                        })
+                      : null}
                     <button
                       className="ticket-buttons"
                       onClick={async (e) => {
                         let user = getUser();
                         addPointToUser(user.userId);
                         deleteTicket(ticket.id);
+                        location.reload();
                         alert("Ticket Solved, point added.");
                       }}
                     >

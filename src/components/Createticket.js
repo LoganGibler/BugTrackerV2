@@ -61,6 +61,7 @@ const Createticket = () => {
             setCategory("");
             setAuthor("");
             setTime("");
+            location.reload();
           } catch (error) {
             throw error;
           }

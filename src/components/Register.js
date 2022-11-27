@@ -27,6 +27,7 @@ const Register = () => {
             storeToken(token)
             setUsername("")
             setPassword("")
+            location.reload();
             // console.log(token);
           } catch (error) {
             throw error;

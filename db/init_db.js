@@ -162,7 +162,7 @@ async function fetchAllUnclaimedTickets() {
 
 async function removeClaimFromTicketTest() {
   try {
-    const data = await removeClaimFromTicketDB(2);
+    const data = await removeClaimFromTicketDB();
     console.log(data);
   } catch (error) {
     throw error;
@@ -181,7 +181,7 @@ async function rebuildDB() {
     await addTicketToUserTest();
     await fetchAllUnclaimedTickets();
     // await addPointToUserDBTest()
-    await removeClaimFromTicketTest()
+    // await removeClaimFromTicketTest()
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");

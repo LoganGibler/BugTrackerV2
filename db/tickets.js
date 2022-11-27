@@ -138,8 +138,9 @@ async function removeClaimFromTicketDB(userId) {
     `);
 
     let claimedTicketId = claimedticket.claimedticket;
-    console.log("this is claimed ticket", claimedTicketId);
+    // console.log("this is claimed ticket", claimedTicketId);
     // console.log(typeof claimedTicketId)
+
     const {
       rows: [ticket],
     } = await client.query(`
@@ -147,9 +148,18 @@ async function removeClaimFromTicketDB(userId) {
       SET
       claimed=FALSE
       WHERE id=${claimedTicketId};
-    `,);
-    console.log("this is changed ticket",ticket)
-    return ticket
+    `);
+
+
+    let value = 0;
+    const { rows } = await client.query(`
+        UPDATE users
+        SET
+        claimedticket=${value}
+        WHERE id=${userId}; 
+      `);
+    // console.log("this is changed ticket", ticket);
+    return ticket;
   } catch (error) {
     throw error;
   }

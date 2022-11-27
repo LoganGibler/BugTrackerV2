@@ -64,7 +64,7 @@ const App = () => {
             <Register />
           </Route>
           <Route path="/currenttask">
-            <Currenttask tickets={tickets} devs={devs}/>
+            <Currenttask tickets={tickets} devs={devs} unclaimedTickets={unclaimedTickets}/>
           </Route>
           <Route path="/login">
             <Login
@@ -83,7 +83,7 @@ const App = () => {
             />
           </Route>
           <Route path="/activetickets">
-            <Activetickets tickets={tickets} setTickets={setTickets} />
+            <Activetickets tickets={tickets} setTickets={setTickets} devs={devs}/>
           </Route>
           <Route path="/createticket">
             <Createticket />
