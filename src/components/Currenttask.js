@@ -6,22 +6,57 @@ import {
   deleteTicket,
   removeTicketFromDev,
   addTicketToDev,
+  addCommentToTicket,
 } from "../api";
 import "./currenttask.css";
 
 const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
+  const [html, setHtml] = useState(null);
   let user = getUser();
-  console.log(user);
+
+  function renderCommentBox(ticket) {
+    try {
+      function getCommentInput() {
+        let comment = document.getElementById("comment-area").value;
+        console.log(comment);
+        console.log(ticket.id);
+        addCommentToTicket(ticket.id, comment);
+      }
+
+      return (
+        <div>
+          <textarea
+            className="comment-input-area"
+            id="comment-area"
+            type="text"
+            placeholder="Type comments here.."
+          ></textarea>
+          <button
+            className="comment-button-submit"
+            onClick={() => {
+              getCommentInput();
+              location.reload();
+            }}
+          >
+            Submit Comment
+          </button>
+        </div>
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
   return (
     <div>
       <div className="everything-current-task">
         <div className="current-task-container">
           {devs.length
             ? devs.map((dev) => {
-                console.log(devs);
+                // console.log(devs);
                 if (user.userId === dev.id) {
-                  console.log(dev.username);
-                  console.log(dev.id);
+                  // console.log(dev.username);
+                  // console.log(dev.id);
                   if (dev.claimedticket !== 0) {
                     return (
                       <div className="current-task-main-container">
@@ -45,6 +80,9 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
                                       <p className="description-currenttask">
                                         {ticket.description}
                                       </p>
+                                      <h5 className="username-comment">Dev Notes:</h5>
+                                      <p className="ticket-comments">{ticket.comments}</p>
+                                      {html}
                                       <button
                                         className="ticket-buttons"
                                         onClick={async (e) => {
@@ -56,6 +94,15 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
                                         }}
                                       >
                                         Solved
+                                      </button>
+                                      <button
+                                        className="ticket-buttons"
+                                        onClick={() => {
+                                          setHtml(renderCommentBox(ticket));
+                                        }}
+                                      >
+                                        {" "}
+                                        Add Comment
                                       </button>
                                       <button
                                         className="ticket-buttons"
@@ -84,7 +131,10 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
                       <div>
                         <div className="unclaimed-tickets-main-container-currenttask">
                           <div>
-                            <h3>Welcome to your personalized task list, {user.username}.</h3>
+                            <h3>
+                              Welcome to your personalized task list,{" "}
+                              {user.username}.
+                            </h3>
                             <p>Total tasks completed: {dev.ticketssolved}</p>
                             <p>
                               You have no active ticket! Start by claiming a

@@ -6,7 +6,8 @@ const {
   getUserByUsername,
   getAllUnclaimedTicketsDB,
   addPointToUser,
-  removeClaimFromTicketDB
+  removeClaimFromTicketDB,
+  addCommentToTicketDB
 } = require("./index.js");
 
 async function dropTables() {
@@ -41,7 +42,8 @@ async function buildTables() {
             claimed BOOLEAN,
             author VARCHAR(255) NOT NULL,
             time VARCHAR(255) NOT NULL,
-            severity VARCHAR(255)
+            severity VARCHAR(255),
+            comments TEXT
         );
         `);
     console.log("Finished building tables");
@@ -178,6 +180,16 @@ async function removeClaimFromTicketTest() {
   }
 }
 
+
+async function addCommentToTicketTest(){
+  try {
+    const data = await addCommentToTicketDB(1, "This is test String")
+    // console.log("add comment to data ticket:" , data)
+    return data
+  } catch (error) {
+    throw error
+  }
+}
 async function rebuildDB() {
   try {
     console.log("starting to build DB");
@@ -191,6 +203,7 @@ async function rebuildDB() {
     await fetchAllUnclaimedTickets();
     // await addPointToUserDBTest()
     await removeClaimFromTicketTest()
+    await addCommentToTicketTest()
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");

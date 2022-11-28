@@ -44,7 +44,7 @@
 
 .description-currenttask{
     margin-top: 50px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .listed-ticket-currenttask{
@@ -63,6 +63,33 @@
     padding: 1.3em;
     margin: 15px;
     min-width: 690px;
+}
+
+.comment-input-area{
+    width: 100%;
+    min-height: 200px;
+    font-size:12pt;
+    margin-top: 2%;
+    border-radius: 15px;
+    padding: 5px;
+    
+    /* resize: none; */
+}
+
+.comment-button-submit{
+   background-color: #262E2E;
+   border-radius: 30px;
+   color: white;
+   border: none;
+   cursor: pointer;
+   width: 20%;
+}
+
+.username-comment{
+    margin-top:50px;
+}
+.ticket-comments{
+    margin-top: 5px;
 }
 
 

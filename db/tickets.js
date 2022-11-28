@@ -110,7 +110,7 @@ async function deleteTicketDB(ticketId) {
 
 // let claimedTicketId;
 async function removeClaimFromTicketDB(userId) {
-  console.log("this is userId passed into db", userId);
+  // console.log("this is userId passed into db", userId);
   try {
     const {
       rows: [claimedticket],
@@ -120,7 +120,7 @@ async function removeClaimFromTicketDB(userId) {
     `);
 
     let claimedTicketId = claimedticket.claimedticket;
-    console.log("this is claimed ticket", claimedTicketId);
+    // console.log("this is claimed ticket", claimedTicketId);
     // console.log(typeof claimedTicketId)
 
     const {
@@ -153,9 +153,9 @@ async function removeClaimFromTicketDB(userId) {
         SELECT * FROM users
         WHERE id=${userId};
       `);
-    console.log("after removeClaim runs:");
-    console.log("this is  changeduser", changeduser);
-    console.log("this is updated ticket", ticket);
+    // console.log("after removeClaim runs:");
+    // console.log("this is  changeduser", changeduser);
+    // console.log("this is updated ticket", ticket);
     return [changeduser, ticket];
   } catch (error) {
     throw error;
@@ -196,14 +196,37 @@ async function addTicketToUserDB(ticketId, userId) {
        WHERE id=${ticketId}
     `);
 
-    console.log(
-      "This is stuff after addtickettouser runs, claimedticket shouldnt be 0:",
-      user
-    );
-    console.log("this is new claimedTicket:", ticket);
+    // console.log(
+    //   "This is stuff after addtickettouser runs, claimedticket shouldnt be 0:",
+    //   user
+    // );
+    // console.log("this is new claimedTicket:", ticket);
     return ticket;
   } catch (error) {
     throw error;
+  }
+}
+
+
+async function addCommentToTicketDB(ticketId, comment){
+  console.log("this is comment:", comment)
+  try {
+    const {rows: [updatedticket],} = await client.query(`
+      UPDATE tickets
+      SET 
+      comments=$1
+      WHERE id=$2
+    `, [comment, ticketId])
+
+    const {rows: [ticket],} = await client.query(`
+      SELECT * FROM tickets
+      WHERE id=${ticketId}
+    `)
+
+    console.log("ticket with comment:",ticket)
+    return updatedticket
+  } catch (error) {
+    throw error
   }
 }
 
@@ -218,4 +241,5 @@ module.exports = {
   // solveTicketDB,
   removeClaimFromTicketDB,
   // addFalseToTicket,
+  addCommentToTicketDB
 };

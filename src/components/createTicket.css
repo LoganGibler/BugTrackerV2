@@ -5,6 +5,7 @@
     font-size:14pt;
     margin-top: 1%;
     border-radius: 10px;
+    resize: none;
 }
 
 .title_box{

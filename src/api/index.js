@@ -158,3 +158,18 @@ export async function removeTicketFromDev(userId){
     throw error
   }
 }
+
+export async function addCommentToTicket(ticketId, comment){
+  console.log(ticketId)
+  console.log(comment)
+  try {
+    const {data} = axios.post("http://localhost:5000/api/tickets/comment", {
+      ticketId: ticketId,
+      comment: comment
+    })
+    console.log(data)
+    return data
+  } catch (error) {
+    throw error
+  }
+}

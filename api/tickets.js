@@ -7,7 +7,8 @@ const {
   getAllUnclaimedTicketsDB,
   addTicketToUserDB,
   deleteTicketDB,
-  removeClaimFromTicketDB
+  removeClaimFromTicketDB,
+  addCommentToTicketDB
 } = require("../db/tickets");
 
 require("dotenv").config();
@@ -49,9 +50,9 @@ ticketsRouter.get("/unclaimed", async (req, res) => {
 
 ticketsRouter.post("/claimticket", async (req, res, next) => {
   const { ticketId, userId } = req.body;
-  console.log("request to claim ticket");
+  // console.log("request to claim ticket");
   const data = await addTicketToUserDB(ticketId, userId);
-  console.log(data);
+  // console.log(data);
   res.send({
     data,
   });
@@ -68,10 +69,20 @@ ticketsRouter.post("/delete", async (req, res, next) => {
 
 ticketsRouter.post("/removeclaim", async (req, res, next) => {
   const { userId } = req.body;
-  console.log("request to unclaim ticket");
+  // console.log("request to unclaim ticket");
   const data = await removeClaimFromTicketDB(userId);
-  console.log("this is cracked data",data)
+  // console.log("this is cracked data",data)
   res.send({ data });
 });
+
+ticketsRouter.post("/comment", async (req, res, next)=>{
+  const {ticketId, comment} = req.body
+  console.log(ticketId, comment)
+  const data = await addCommentToTicketDB(ticketId, comment)
+  console.log(data)
+  res.send({
+    data
+  })
+})
 
 module.exports = ticketsRouter;
