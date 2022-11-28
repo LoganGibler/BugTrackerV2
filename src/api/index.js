@@ -54,7 +54,8 @@ export async function createATicket(
   description,
   category,
   author,
-  time
+  time, 
+  severity
 ) {
   try {
     // console.log(title, description, category, author, time)
@@ -66,6 +67,7 @@ export async function createATicket(
         description: description,
         author: author,
         time: time,
+        severity: severity
       }
     );
 
@@ -150,7 +152,7 @@ export async function removeTicketFromDev(userId){
     const {data} = axios.post("http://localhost:5000/api/tickets/removeclaim",{
       userId: userId
     })
-    console.log("this is cracked data", data)
+    console.log("this is data returned from remove ticket", data)
     return data
   } catch (error) {
     throw error

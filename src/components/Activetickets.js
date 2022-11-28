@@ -15,7 +15,6 @@ const Activetickets = ({ tickets, devs }) => {
 
   return (
     <div>
-      {/* <h1>Welcome to the Activetickets Component</h1> */}
       <div className="tickets-main-container">
         {tickets.length
           ? tickets.map((ticket) => {
@@ -25,6 +24,8 @@ const Activetickets = ({ tickets, devs }) => {
                   <div className="listed-ticket">
                     <h3> {ticket.title}</h3>
                     <p>Origin of Problem: {ticket.category}</p>
+                    <p>Severity: {ticket.severity}</p>
+                    <p>Category: {ticket.category}</p>
                     <p>Created by: {ticket.author}</p>
                     <p>At: {ticket.time}</p>
                     <p>ID: {ticket.id}</p>
@@ -34,48 +35,14 @@ const Activetickets = ({ tickets, devs }) => {
                     {devs.length
                       ? devs.map((dev) => {
                           if (user.userId === dev.id) {
-                            if (dev.claimedticket !== 0) {
-                              return (
-                                <button
-                                  className="ticket-buttons"
-                                  onClick={async (e) => {
-                                    removeTicketFromDev(user.userId);
-                                    addTicketToDev(ticket.id, user.userId);
-                                    location.reload();
-                                    alert("Ticket successfully added");
-                                  }}
-                                >
-                                  Claim
-                                </button>
-                              );
-                            }
-                            if (dev.claimedticket === 0) {
-                              return (
-                                <button
-                                  className="ticket-buttons"
-                                  onClick={async (e) => {
-                                    addTicketToDev(ticket.id, user.userId);
-                                    location.reload();
-                                    alert("Ticket successfully added");
-                                  }}
-                                >
-                                  Claim
-                                </button>
-                              );
-                            }
+                            return (
+                              <button className="comment-button">
+                                Add Comment
+                              </button>
+                            );
                           }
                         })
                       : null}
-                    <button
-                      className="ticket-buttons"
-                      onClick={async (e) => {
-                        addPointToUser(user.userId);
-                        deleteTicket(ticket.id);
-                        alert("Ticket Solved, point added.");
-                      }}
-                    >
-                      Solved
-                    </button>
                   </div>
                 </div>
               );

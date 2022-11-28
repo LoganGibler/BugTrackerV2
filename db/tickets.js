@@ -1,17 +1,24 @@
 // const ticketsRouter = require("../api/tickets");
 const { client } = require("./users");
 
-async function createTicketDB(title, description, category, author, time) {
+async function createTicketDB(
+  title,
+  description,
+  category,
+  author,
+  time,
+  severity
+) {
   try {
     const {
       rows: [ticket],
     } = await client.query(
       `
-    INSERT INTO tickets(title, description, category, claimed, author, time)
-    VALUES ($1, $2, $3, false, $4, $5)
+    INSERT INTO tickets(title, description, category, claimed, author, time, severity)
+    VALUES ($1, $2, $3, false, $4, $5, $6)
     RETURNING *
     `,
-      [title, description, category, author, time]
+      [title, description, category, author, time, severity]
     );
     return ticket;
   } catch (error) {
@@ -65,32 +72,6 @@ async function getAllBackEndTicketsDB() {
     throw error;
   }
 }
-// set user-claimedticket to ticketID
-// need to get userID and ticketID, kinda weird?
-async function addTicketToUserDB(ticketId, userId) {
-  try {
-    const {
-      rows: [user],
-    } = await client.query(`
-       UPDATE users
-       SET 
-       claimedticket = ${ticketId}
-       WHERE id = ${userId};
-    `);
-
-    const {
-      rows: [ticket],
-    } = await client.query(`
-        UPDATE tickets
-        SET 
-        claimed=True
-        WHERE id=${ticketId};
-    `);
-    return ticket;
-  } catch (error) {
-    throw error;
-  }
-}
 
 // async function solveTicketDB() {
 //   const solved = "Solved";
@@ -129,6 +110,7 @@ async function deleteTicketDB(ticketId) {
 
 // let claimedTicketId;
 async function removeClaimFromTicketDB(userId) {
+  console.log("this is userId passed into db", userId);
   try {
     const {
       rows: [claimedticket],
@@ -138,11 +120,11 @@ async function removeClaimFromTicketDB(userId) {
     `);
 
     let claimedTicketId = claimedticket.claimedticket;
-    // console.log("this is claimed ticket", claimedTicketId);
+    console.log("this is claimed ticket", claimedTicketId);
     // console.log(typeof claimedTicketId)
 
     const {
-      rows: [ticket],
+      rows: [updatedticket],
     } = await client.query(`
       UPDATE tickets
       SET
@@ -150,6 +132,12 @@ async function removeClaimFromTicketDB(userId) {
       WHERE id=${claimedTicketId};
     `);
 
+    const {
+      rows: [ticket],
+    } = await client.query(`
+      SELECT * FROM tickets
+      WHERE id=${claimedTicketId};
+    `);
 
     let value = 0;
     const { rows } = await client.query(`
@@ -158,7 +146,61 @@ async function removeClaimFromTicketDB(userId) {
         claimedticket=${value}
         WHERE id=${userId}; 
       `);
-    // console.log("this is changed ticket", ticket);
+
+    const {
+      rows: [changeduser],
+    } = await client.query(`
+        SELECT * FROM users
+        WHERE id=${userId};
+      `);
+    console.log("after removeClaim runs:");
+    console.log("this is  changeduser", changeduser);
+    console.log("this is updated ticket", ticket);
+    return [changeduser, ticket];
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function addTicketToUserDB(ticketId, userId) {
+  try {
+    const {
+      rows: [updateuser],
+    } = await client.query(`
+       UPDATE users
+       SET 
+       claimedticket = ${ticketId}
+       WHERE id = ${userId};
+    `);
+
+    const {
+      rows: [user],
+    } = await client.query(`
+       SELECT * FROM users
+       WHERE id=${userId}
+    `);
+
+    const {
+      rows: [changedticket],
+    } = await client.query(`
+        UPDATE tickets
+        SET 
+        claimed=TRUE
+        WHERE id=${ticketId};
+    `);
+
+    const {
+      rows: [ticket],
+    } = await client.query(`
+       SELECT * FROM tickets
+       WHERE id=${ticketId}
+    `);
+
+    console.log(
+      "This is stuff after addtickettouser runs, claimedticket shouldnt be 0:",
+      user
+    );
+    console.log("this is new claimedTicket:", ticket);
     return ticket;
   } catch (error) {
     throw error;

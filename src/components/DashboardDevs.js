@@ -11,7 +11,7 @@ const DashboardDevs = ({ devs, tickets }) => {
           ? devs.map((dev) => {
               if (dev.claimedticket !== 0) {
                 return (
-                  <div className="dashboard-main-container">
+                  <div>
                     <div className="dashboard-dev-ticket">
                       <h3 className="dashboard-text">{dev.username}</h3>
                       {/* <p className="dashboard-text">ID: {dev.id}</p> */}

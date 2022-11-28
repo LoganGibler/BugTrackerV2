@@ -20,6 +20,7 @@ const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
                   <div className="listed-ticket">
                     <h3> {ticket.title}</h3>
                     <p>Origin of Problem: {ticket.category}</p>
+                    <p>Severity: {ticket.severity}</p>
                     <p>Created by: {ticket.author}</p>
                     <p>At: {ticket.time}</p>
                     <p>ID: {ticket.id}</p>
@@ -35,11 +36,13 @@ const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
                               return (
                                 <button
                                   className="ticket-buttons"
-                                  onClick={async (e) => {
-                                    removeTicketFromDev(user.userId);
-                                    addTicketToDev(ticket.id, user.userId);
-                                    location.reload();
+                                  onClick={async(e) => {
+                                    // console.log(user.userId)
+                                    // console.log(ticket.id)
+                                    await removeTicketFromDev(user.userId);
                                     alert("Ticket successfully added");
+                                    await addTicketToDev(ticket.id, user.userId);
+                                    location.reload();
                                   }}
                                 >
                                   Claim
@@ -50,7 +53,7 @@ const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
                               return (
                                 <button
                                   className="ticket-buttons"
-                                  onClick={async (e) => {
+                                  onClick={(e) => {
                                     addTicketToDev(ticket.id, user.userId);
                                     location.reload();
                                     alert("Ticket successfully added");

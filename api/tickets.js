@@ -20,14 +20,15 @@ ticketsRouter.get("/", async (req, res) => {
 });
 
 ticketsRouter.post("/createticket", async (req, res, next) => {
-  const { title, category, description, author, time } = req.body;
+  const { title, category, description, author, time, severity } = req.body;
   try {
     const newTicket = await createTicketDB(
       title,
       description,
       category,
       author,
-      time
+      time,
+      severity
     );
     // console.log(newTicket)
     res.send({
@@ -48,8 +49,9 @@ ticketsRouter.get("/unclaimed", async (req, res) => {
 
 ticketsRouter.post("/claimticket", async (req, res, next) => {
   const { ticketId, userId } = req.body;
+  console.log("request to claim ticket");
   const data = await addTicketToUserDB(ticketId, userId);
-  // console.log(data);
+  console.log(data);
   res.send({
     data,
   });
@@ -66,9 +68,9 @@ ticketsRouter.post("/delete", async (req, res, next) => {
 
 ticketsRouter.post("/removeclaim", async (req, res, next) => {
   const { userId } = req.body;
-
+  console.log("request to unclaim ticket");
   const data = await removeClaimFromTicketDB(userId);
-  // console.log("this is cracked data",data)
+  console.log("this is cracked data",data)
   res.send({ data });
 });
 

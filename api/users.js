@@ -12,7 +12,7 @@ const {
 } = require("../db/users");
 
 usersRouter.get("/", async (req, res) => {
-  console.log("request to users");
+  // console.log("request to users");
   const users = await allUsers();
 
   res.send({

@@ -40,7 +40,8 @@ async function buildTables() {
             category VARCHAR(255),
             claimed BOOLEAN,
             author VARCHAR(255) NOT NULL,
-            time VARCHAR(255) NOT NULL
+            time VARCHAR(255) NOT NULL,
+            severity VARCHAR(255)
         );
         `);
     console.log("Finished building tables");
@@ -69,42 +70,49 @@ async function createInitalTicket() {
       "Login Button Leaks login token to front end console. Likely a uncommented console.log().",
       "FrontEnd",
       "Logan",
-      "11/21/2022"
+      "11/21/2022",
+      "Level 1"
     );
     const ticketTwo = await createTicketDB(
       "Registration Problems",
       "Not getting notified if registration works. Please add alert box. That way we know when stuff works. Also you need to fix the page refreshing Logan.",
       "FrontEnd",
       "Logan",
-      "11/23/2022"
+      "11/23/2022",
+      "Level 2"
     );
     const ticketThree = await createTicketDB(
       "TicketProblem",
       "This is an unclaimed Ticket. I need to see if this query works. Hopefully it does. It is a very serious problem. I should add a urgency value.",
       "Backend",
       "Logan",
-      "11/23/2022"
+      "11/23/2022",
+      "level 3"
+      
     );
     const ticketFour = await createTicketDB(
       "Microphone is too quite.",
       "It is super sad when no one can hear me because my microphone doesnt work. I think someone needs to help me update my drivers.",
       "Backend",
       "Payton",
-      "11/23/2022"
+      "11/23/2022",
+      "Level 4"
     );
     const ticketFive = await createTicketDB(
       "Developer tools are filled.",
       "We should go through our code and make sure all not used console.logs and other irrelivant things are commented out. Cant be leaking our info!",
       "Backend",
       "Payton",
-      "11/23/2022"
+      "11/23/2022",
+      "Level 1"
     );
     const ticketSix = await createTicketDB(
       "Google Chrome using so much ram.",
       "Google chrome seems to be taking up 80% of my cpu usage. Can we talk about that? I only have 4 tabs open!!!",
       "Backend",
       "Logan",
-      "11/23/2022"
+      "11/23/2022",
+      "Level 2"
     );
     // console.log(ticketOne, ticketTwo, ticketThree)
     return [
@@ -162,8 +170,9 @@ async function fetchAllUnclaimedTickets() {
 
 async function removeClaimFromTicketTest() {
   try {
-    const data = await removeClaimFromTicketDB();
-    console.log(data);
+    await removeClaimFromTicketDB(1);
+    await addTicketToUserDB(3, 1)
+    // console.log(data);
   } catch (error) {
     throw error;
   }
@@ -181,7 +190,7 @@ async function rebuildDB() {
     await addTicketToUserTest();
     await fetchAllUnclaimedTickets();
     // await addPointToUserDBTest()
-    // await removeClaimFromTicketTest()
+    await removeClaimFromTicketTest()
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");

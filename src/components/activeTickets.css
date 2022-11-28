@@ -37,4 +37,14 @@
     opacity: 0.8;
     background-color: #c47b74;
 }
+
+.comment-button{
+    margin-top: 15px;
+   background-color: #262E2E;
+   border-radius: 30px;
+   color: white;
+   border: none;
+   cursor: pointer;
+   width: 27%;
+}
    

@@ -11,7 +11,8 @@
 .dashboard-dev-ticket{
     display: flex;
     justify-content: center; 
-    margin-top: 15px;
+    margin-top: 10px;
+    margin: 10px;
     min-width: 200px;
     max-width: 480px;
     background-color: whitesmoke;
@@ -29,7 +30,8 @@
 
 .listed-ticket-dashboard{
     align-content: center;
-    margin-top: 15px;
+    /* margin-top: 15px; */
+    margin: 10px;
     padding: 1em;
     background-color: whitesmoke;
     max-width: 460px;
