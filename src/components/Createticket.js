@@ -75,7 +75,7 @@ const Createticket = () => {
           }
         }}
       >
-        <h4>Title</h4>
+        <h4 className="header-text">Title</h4>
         <input
           className="title_box"
           value={title}
@@ -84,7 +84,7 @@ const Createticket = () => {
             setTitle(e.target.value);
           }}
         ></input>
-        <h4>Select Category:</h4>
+        <h4 className="header-text">Select Category:</h4>
         <select
           name="category"
           id="dropdownCategory"
@@ -100,7 +100,7 @@ const Createticket = () => {
           <option value="Backend">Backend</option>
           <option value="Api issue">Api issue</option>
         </select>
-        <h4>Select Severity:</h4>
+        <h4 className="header-text">Select Severity:</h4>
         <select
           name="severity"
           id="dropdownSeverity"
@@ -117,7 +117,7 @@ const Createticket = () => {
           <option value="level 3">Level 3</option>
           <option value="level 4">Level 4</option>
         </select>
-        <h4>Description</h4>
+        <h4 className="header-text">Description</h4>
         <textarea
           className="large_inputbox"
           value={description}

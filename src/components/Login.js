@@ -25,6 +25,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
               setPassword("");
               setIsLoggedIn(true);
               history.push("/dashboard");
+              location.reload();
             } else {
               alert("Login Failed.");
             }

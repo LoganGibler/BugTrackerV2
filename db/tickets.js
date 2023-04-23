@@ -209,22 +209,32 @@ async function addTicketToUserDB(ticketId, userId) {
 
 
 async function addCommentToTicketDB(ticketId, comment){
-  console.log("this is comment:", comment)
+  // console.log("this is comment:", comment)
   try {
+
+    const {rows: [commentValue],} = await client.query(`
+    SELECT comments FROM tickets
+    WHERE id=$1
+    `,[ticketId])
+    //  add comment value onto the back of commentValue, then parse out the string where it says username.
+    // console.log("this is comment value",commentValue.comments)
+    let newCommentValue = commentValue.comments + " " + "\n" + comment + " " + "\n"
+    console.log("this is newcomment:",newCommentValue)
+
     const {rows: [updatedticket],} = await client.query(`
       UPDATE tickets
       SET 
       comments=$1
       WHERE id=$2
-    `, [comment, ticketId])
+    `, [newCommentValue, ticketId])
 
     const {rows: [ticket],} = await client.query(`
       SELECT * FROM tickets
       WHERE id=${ticketId}
     `)
 
-    console.log("ticket with comment:",ticket)
-    return updatedticket
+    console.log("ticket with added comment:",ticket)
+    return ticket
   } catch (error) {
     throw error
   }

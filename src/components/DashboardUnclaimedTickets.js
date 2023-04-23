@@ -66,18 +66,6 @@ const DashboardUnclaimedTickets = ({ devs, unclaimedTickets, tickets }) => {
                           }
                         })
                       : null}
-                    <button
-                      className="ticket-buttons"
-                      onClick={async (e) => {
-                        let user = getUser();
-                        addPointToUser(user.userId);
-                        deleteTicket(ticket.id);
-                        location.reload();
-                        alert("Ticket Solved, point added.");
-                      }}
-                    >
-                      Solved
-                    </button>
                   </div>
                 </div>
               );

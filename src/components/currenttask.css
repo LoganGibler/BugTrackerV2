@@ -6,7 +6,7 @@
 
 .current-task-container{
     justify-content: center;
-    background-color: #c47b74;
+    background-color: #262E2E;
     border-radius: 50px;
     max-width: 750px;
     min-width: 700px;
@@ -15,6 +15,11 @@
     margin-top: 15px;
 }
 
+.header-text{
+   color: white;
+}
+
+
 .current-task-main-container{
     justify-content: center; 
     /* margin-top: 15px; */
@@ -22,7 +27,7 @@
     min-width: 700px;
     min-height: 500px;
     max-height: 1000px;
-    background-color: #c47b74;
+    background-color: #262E2E;
     border-radius: 50px;
     padding: 0.8em;
 }
@@ -47,9 +52,6 @@
     font-size: 18px;
 }
 
-.listed-ticket-currenttask{
-    background-color: chartreuse;
-}
 
 .unclaimed-tickets-main-container-currenttask{
     display: flex;
@@ -90,6 +92,17 @@
 }
 .ticket-comments{
     margin-top: 5px;
+}
+
+.ticket-buttons-currenttask{
+    margin-top: 145px;
+   background-color: #262E2E;
+   border-radius: 30px;
+   color: white;
+   border: none;
+   cursor: pointer;
+   width: 17%;
+   
 }
 
 

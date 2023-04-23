@@ -41,7 +41,7 @@ a{
 
 }
 .nav-branding:hover{
-    color: #c47b74;
+    color: silver;
 }
 .nav-link{
     left: 15%;
@@ -50,7 +50,7 @@ a{
 }
 
 .nav-link:hover{
-color: #c47b74;
+color: silver;
 }
 
 .middle-menu{

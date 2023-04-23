@@ -18,9 +18,11 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
     try {
       function getCommentInput() {
         let comment = document.getElementById("comment-area").value;
-        console.log(comment);
+
+        let devAddedComment = `${user.username}: ${comment}`;
+        console.log(devAddedComment);
         console.log(ticket.id);
-        addCommentToTicket(ticket.id, comment);
+        addCommentToTicket(ticket.id, devAddedComment);
       }
 
       return (
@@ -70,67 +72,150 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
                         {tickets.length
                           ? tickets.map((ticket) => {
                               if (dev.claimedticket === ticket.id) {
-                                return (
-                                  <div className="tickets-main-container-currenttask">
-                                    <div listed-ticket-currenttask>
-                                      <h3>{ticket.title}</h3>
-                                      <p>Created By: {ticket.author}</p>
-                                      <p>*insert email of user*</p>
-                                      <p>Created: {ticket.time}</p>
-                                      <p className="description-currenttask">
-                                        {ticket.description}
-                                      </p>
-                                      <h5 className="username-comment">Dev Notes:</h5>
-                                      <p className="ticket-comments">{ticket.comments}</p>
-                                      {html}
-                                      <button
-                                        className="ticket-buttons"
-                                        onClick={async (e) => {
-                                          let user = getUser();
-                                          addPointToUser(user.userId);
-                                          deleteTicket(ticket.id);
-                                          location.reload();
-                                          alert("Ticket Solved, point added.");
-                                        }}
-                                      >
-                                        Solved
-                                      </button>
-                                      <button
-                                        className="ticket-buttons"
-                                        onClick={() => {
-                                          setHtml(renderCommentBox(ticket));
-                                        }}
-                                      >
-                                        {" "}
-                                        Add Comment
-                                      </button>
-                                      <button
-                                        className="ticket-buttons"
-                                        onClick={async (e) => {
-                                          let user = getUser();
-                                          removeTicketFromDev(user.userId);
-                                          location.reload();
-                                          alert("Ticket unclaimed.");
-                                        }}
-                                      >
-                                        Unclaim
-                                      </button>
+                                // console.log("this is ticket comment",ticket.comments)
+                                if (ticket.comments === null) {
+                                  return (
+                                    <div className="tickets-main-container-currenttask">
+                                      <div listed-ticket-currenttask>
+                                        <h3>{ticket.title}</h3>
+                                        <p>Created By: {ticket.author}</p>
+                                        <p>Severity: {ticket.severity}</p>
+                                        <p>*insert email of user*</p>
+                                        <p>Created: {ticket.time}</p>
+                                        <p className="description-currenttask">
+                                          {ticket.description}
+                                        </p>
+                                        {html}
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={async (e) => {
+                                            let user = getUser();
+                                            addPointToUser(user.userId);
+                                            deleteTicket(ticket.id);
+                                            location.reload();
+                                            alert(
+                                              "Ticket Solved, point added."
+                                            );
+                                          }}
+                                        >
+                                          Solved
+                                        </button>
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={() => {
+                                            setHtml(renderCommentBox(ticket));
+                                          }}
+                                        >
+                                          {" "}
+                                          Add Comment
+                                        </button>
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={async (e) => {
+                                            let user = getUser();
+                                            removeTicketFromDev(user.userId);
+                                            location.reload();
+                                            alert("Ticket unclaimed.");
+                                          }}
+                                        >
+                                          Unclaim
+                                        </button>
+                                      </div>
                                     </div>
-                                  </div>
-                                );
+                                  );
+                                } else {
+                                  let resultArray = [];
+                                  let commentString = ticket.comments;
+                                  let splitComment = commentString.split("null");
+                                  commentString = splitComment[1];
+                                  resultArray.push(commentString + ".");
+                                  let finalString = resultArray[0];
+                                  console.log(finalString);
+                                  finalString = finalString.split("\n");
+                                
+                                  return (
+                                    <div className="tickets-main-container-currenttask">
+                                      <div listed-ticket-currenttask>
+                                        <h3>{ticket.title}</h3>
+                                        <p>
+                                          Origin of Problem: {ticket.category}
+                                        </p>
+                                        <p>Created By: {ticket.author}</p>
+                                        <p>Severity: {ticket.severity}</p>
+                                        <p>*insert email of user*</p>
+                                        <p>Created: {ticket.time}</p>
+                                        <p className="description-currenttask">
+                                          {ticket.description}
+                                        </p>
+                                        <h5 className="username-comment">
+                                          Dev Notes:
+                                        </h5>
+                                        {/* <p
+                                          className="ticket-comments"
+                                          id="commentString"
+                                        >
+                                        </p> */}
+                                        {finalString.length
+                                            ? finalString.map((comment) => {
+                                                if (comment.length > 5) {
+                                                  return (
+                                                    <div>
+                                                      <p>{comment}</p>
+                                                    </div>
+                                                  );
+                                                }
+                                              })
+                                            : null}
+                                        {html}
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={async (e) => {
+                                            let user = getUser();
+                                            addPointToUser(user.userId);
+                                            deleteTicket(ticket.id);
+                                            location.reload();
+                                            alert(
+                                              "Ticket Solved, point added."
+                                            );
+                                          }}
+                                        >
+                                          Solved
+                                        </button>
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={() => {
+                                            setHtml(renderCommentBox(ticket));
+                                          }}
+                                        >
+                                          {" "}
+                                          Add Comment
+                                        </button>
+                                        <button
+                                          className="ticket-buttons-currenttask"
+                                          onClick={async (e) => {
+                                            let user = getUser();
+                                            removeTicketFromDev(user.userId);
+                                            location.reload();
+                                            alert("Ticket unclaimed.");
+                                          }}
+                                        >
+                                          Unclaim
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                }
                               }
                             })
                           : null}
                       </div>
                     );
-                  }
-                  // return statement here if no claimed ticket
-                  else {
+                  } else {
                     // render unclaimed tickets here with buttons to claim
                     return (
                       <div>
                         <div className="unclaimed-tickets-main-container-currenttask">
-                          <div>
+                          <div className="header-text">
                             <h3>
                               Welcome to your personalized task list,{" "}
                               {user.username}.
@@ -150,6 +235,7 @@ const Currenttask = ({ tickets, devs, unclaimedTickets }) => {
                                       <p>
                                         Origin of Problem: {ticket.category}
                                       </p>
+                                      <p>Severity: {ticket.severity}</p>
                                       <p>Created by: {ticket.author}</p>
                                       <p>At: {ticket.time}</p>
                                       <p>ID: {ticket.id}</p>

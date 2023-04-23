@@ -203,7 +203,7 @@ async function rebuildDB() {
     await fetchAllUnclaimedTickets();
     // await addPointToUserDBTest()
     await removeClaimFromTicketTest()
-    await addCommentToTicketTest()
+    // await addCommentToTicketTest()
     console.log("finished building DB");
   } catch (error) {
     console.log("error during rebuild DB");
